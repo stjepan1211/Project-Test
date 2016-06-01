@@ -49,18 +49,10 @@ namespace Project.Code
                 return true;
             }
         }
-        //vraca false ako nije unesen float odnostno ako ga ne uspije parsirati
-        public static bool IsFloat(string unformatedGPA, CultureInfo Culture)
+        //vraca true i float varijablu ako je broj uspjesno parsiran
+        public static void IsFloat(string unformatedGPA, CultureInfo Culture, out bool isFloat, out float gpa)
         {
-            float F;
-            try
-            {
-                return float.TryParse(unformatedGPA, NumberStyles.AllowDecimalPoint, Culture, out F);
-            }
-            catch (FormatException e)
-            {
-                return false;
-            }
+            isFloat = float.TryParse(unformatedGPA, NumberStyles.AllowDecimalPoint, Culture, out gpa);
         }
     }
 }
