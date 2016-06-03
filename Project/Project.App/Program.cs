@@ -16,11 +16,6 @@ namespace Project.App
             string unformatedGpaInput;
             float gpa;
             bool isGpaFloat; 
-            bool isOperationTrue;
-            bool isLastNameEmpty;
-            bool isFirstNameEmpty;
-            bool isEnlist;
-            bool isDisplay;
             int id;
             Student Student;
             StudentIdGenerator IdGenerator = StudentIdGenerator.GetGenerator();
@@ -33,76 +28,69 @@ namespace Project.App
             //program se vrti dok korisnik ne upise display, omoguceno preko do-while
             do
             {
-                //unos operacije se vrti dok korisnik ne unese ispravnu operaciju, provjera se vrsi
-                //preko objekta klase Inputcheck
-                do
+                //unos i provjera operacije
+                while (true)
                 {
                     Console.Write("Operation: ");
                     operationInput = Console.ReadLine().ToUpper();
-                    isOperationTrue = InputCheck.OperationCheck(operationInput);
-                    if (!isOperationTrue)
+                    if (!InputCheck.OperationCheck(operationInput))
+                    {
                         Console.WriteLine("Operation non-existing, please use appropriate operation.");
-                } while (InputCheck.OperationCheck(operationInput) != true);
-
-                //izmjena u (true/false) case umjesto switch-case, ukoliko je korisnik unio "enlist" vrijednost bool
-                //varijable isEnlist je true, ista provjera je i za display
-                if (operationInput == Operations.Enlist) 
-                {
-                    isEnlist = true;
-                }
-                else
-                {
-                    isEnlist = false;
-                }
-
-                if (operationInput == Operations.Display)
-                {
-                    isDisplay = true;
-                }
-                else
-                {
-                    isDisplay = false;
+                        continue;
+                    }
+                    else
+                        break;
                 }
                 //ovisno o isEnlist i isDisplay izvode se blokovi
-                if (isEnlist)
-                {   
-                    //provjera unosta imena i prezimena, preko objekta klase Inputcheck
-                    //program provjerava je li uneseno ista
+                if (operationInput == Operations.Enlist)
+                {
+                    //unos i provjera imena studenta
                     Console.WriteLine("Student");
-                    do
+                    while (true)
                     {
                         Console.Write("First name: ");
                         firstName = Console.ReadLine();
-                        isFirstNameEmpty = InputCheck.FirstNameCheck(firstName);
-                        if (!isFirstNameEmpty)
+                        if (!InputCheck.FirstNameCheck(firstName))
+                        {
                             Console.WriteLine("You need to insert value.");
-                    } while (InputCheck.FirstNameCheck(firstName) != true);
-                    do
+                            continue;
+                        }
+                        else
+                            break;
+                    } 
+                    //unos i provjera prezimena studenta
+                    while (true)
                     {
                         Console.Write("Last name: ");
                         lastName = Console.ReadLine();
-                        isLastNameEmpty = InputCheck.LastNameCheck(lastName);
-                        if (!isLastNameEmpty)
+                        if (!InputCheck.LastNameCheck(lastName))
+                        {
                             Console.WriteLine("You need to insert value.");
-                    } while (InputCheck.LastNameCheck(lastName) != true);
-                    //provjera unosa gpa, sve dok korisnik ne unese ista drugo osim
-                    //dec broja s tockom program zahtijeva novi unos
-                    //provjera preko objekta klase Inputcheck koji vraca true ili false
-                    //za provjeru je li broj float, slicno kao u zakomentiranom try-catch
-                    do
+                            continue;
+                        }
+                        else
+                            break;
+                    }
+                    //unos i provjera gpa studenta, potreban unos u obliku 00.0 
+                    while (true)
                     {
                         Console.Write("GPA: ");
                         unformatedGpaInput = Console.ReadLine();
                         InputCheck.IsFloat(unformatedGpaInput, Culture, out isGpaFloat, out gpa);
                         if (!isGpaFloat)
+                        {
                             Console.WriteLine("You need to insert numerical value.");
-                    } while (isGpaFloat != true);
-                    //parametarskog konstruktora i dodavanje u listu
+                            continue;
+                        }
+                        else
+                            break;
+                    }
                     id = IdGenerator.NextId();
+                    //kreiranje novog objekta preko parametarskog konstruktora i dodavanje u listu
                     Student = new Student(id, firstName, lastName, gpa);
                     StudentContainer.AddStudent(Student); 
                 } 
-                if (isDisplay) 
+                if (operationInput == Operations.Display) 
                 {
                     //u slucaju odabira operacije display u novi objekt se kopira lista iz
                     //klase StudentContainer, ako je prazna daje poruku ako nije ispisuje ju
